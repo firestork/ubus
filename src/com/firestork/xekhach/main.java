@@ -17,7 +17,7 @@ public class main {
 	 * @param args
 	 * @throws XPatherException
 	 */
-
+////
 	public static void main(String[] args) throws XPatherException {
 
 		ConfigurationXpath config = new ConfigurationXpath();
