@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+    <xekhach>
+        <ten-nha-xe>//div[@class='transporter-col wd-160 fl-l']/p[@class='transporter-name']</ten-nha-xe>
+        <diem-di>//div[@class='depart-station rel-pos fl-l']/p</diem-di>
+        <diem-den>//div[@class='destination-station rel-pos fl-l']/p</diem-den>
+		<gio-di>//*[@id='FromTimes']</gio-di>
+		<gio-den>//*[@id='ToTimes']</gio-den>
+		<tong-thoi-gian>//div[@class='input-set rel-pos clearfix clr']/p</tong-thoi-gian>
+		<gia>//div[@class='price-col rel-pos wd-130 mg-l-15 fl-l']/p</gia>
+		<ghe>//div[@class='benefit-col wd-200 mg-l-15 fl-l']/p[@class='seat-info']</ghe>
+        
+    </xekhach>ss
+</config>
