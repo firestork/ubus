@@ -19,7 +19,6 @@ public class main {
 	 */
 
 	public static void main(String[] args) throws XPatherException {
-		// TODO Auto-generated method stub
 
 		ConfigurationXpath config = new ConfigurationXpath();
 		map = config.insertMap("config.xml");
