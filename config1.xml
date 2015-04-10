@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+    <xekhach>
+        
+        <route-name>//div[@class='transporter-col wd-160 fl-l']/p[@class='route']</route-name>
+		<start-time>//*[@id='FromTimes']</start-time>
+		<stop-time>//*[@id='ToTimes']</stop-time>
+		<total-time>//div[@class='input-set rel-pos clearfix clr']/p</total-time>
+		<price>//div[@class='price-col rel-pos wd-130 mg-l-15 fl-l']/p</price>
+		<seat-info>//div[@class='benefit-col wd-200 mg-l-15 fl-l']/p[@class='seat-info']</seat-info>
+       	<benifit>//div[@class='benefit-label clearfix']</benifit>
+    </xekhach>
+</config>

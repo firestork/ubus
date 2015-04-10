@@ -2,42 +2,50 @@ package com.firestork.xekhach;
 
 public class TuyenXe {
 
-	private int id;
-	private NhaXe tranpsort;
-	private BenXe froStop;
-	private BenXe tostop;
+	private long routeID;
+	private long operatorID;
+	private long fromStopID;
+	private long tostopID;
 	
 	private String routeName;
-	private long startTime;
-	private long stopTime;
-	private long totalTime;
+	private String startTime;
+	private String stopTime;
+	private String totalTime;
 	private String price;
 	private String seatInfo;
+	private String benifit;
 	
 	
-	public int getId() {
-		return id;
+	
+	public String getBenifit() {
+		return benifit;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setBenifit(String benifit) {
+		this.benifit = benifit;
 	}
-	public NhaXe getTranpsort() {
-		return tranpsort;
+	public long getRouteID() {
+		return routeID;
 	}
-	public void setTranpsort(NhaXe tranpsort) {
-		this.tranpsort = tranpsort;
+	public void setRouteID(long routeID) {
+		this.routeID = routeID;
 	}
-	public BenXe getFroStop() {
-		return froStop;
+	public long getOperatorID() {
+		return operatorID;
 	}
-	public void setFroStop(BenXe froStop) {
-		this.froStop = froStop;
+	public void setOperatorID(long operatorID) {
+		this.operatorID = operatorID;
 	}
-	public BenXe getTsotop() {
-		return tostop;
+	public long getFromStopID() {
+		return fromStopID;
 	}
-	public void setTsotop(BenXe tsotop) {
-		this.tostop = tsotop;
+	public void setFromStopID(long fromStopID) {
+		this.fromStopID = fromStopID;
+	}
+	public long getTostopID() {
+		return tostopID;
+	}
+	public void setTostopID(long tostopID) {
+		this.tostopID = tostopID;
 	}
 	public String getRouteName() {
 		return routeName;
@@ -45,22 +53,22 @@ public class TuyenXe {
 	public void setRouteName(String routeName) {
 		this.routeName = routeName;
 	}
-	public long getStartTime() {
+	public String getStartTime() {
 		return startTime;
 	}
-	public void setStartTime(long startTime) {
+	public void setStartTime(String startTime) {
 		this.startTime = startTime;
 	}
-	public long getStopTime() {
+	public String getStopTime() {
 		return stopTime;
 	}
-	public void setStopTime(long stopTime) {
+	public void setStopTime(String stopTime) {
 		this.stopTime = stopTime;
 	}
-	public long getTotalTime() {
+	public String getTotalTime() {
 		return totalTime;
 	}
-	public void setTotalTime(long totalTime) {
+	public void setTotalTime(String totalTime) {
 		this.totalTime = totalTime;
 	}
 	public String getPrice() {
@@ -75,12 +83,30 @@ public class TuyenXe {
 	public void setSeatInfo(String seatInfo) {
 		this.seatInfo = seatInfo;
 	}
-	
-	
-	
-	
-	
-	
+	public TuyenXe(long routeID, long operatorID, long fromStopID,
+			long tostopID, String routeName, String startTime, String stopTime,
+			String totalTime, String price, String seatInfo) {
+		this.routeID = routeID;
+		this.operatorID = operatorID;
+		this.fromStopID = fromStopID;
+		this.tostopID = tostopID;
+		this.routeName = routeName;
+		this.startTime = startTime;
+		this.stopTime = stopTime;
+		this.totalTime = totalTime;
+		this.price = price;
+		this.seatInfo = seatInfo;
+	}
+	public TuyenXe() {
+	}
+	@Override
+	public String toString() {
+		return "TuyenXe [routeID=" + routeID + ", operatorID=" + operatorID
+				+ ", fromStopID=" + fromStopID + ", tostopID=" + tostopID
+				+ ", routeName=" + routeName + ", startTime=" + startTime
+				+ ", stopTime=" + stopTime + ", totalTime=" + totalTime
+				+ ", price=" + price + ", seatInfo=" + seatInfo + "]";
+	}
 	
 	
 }
