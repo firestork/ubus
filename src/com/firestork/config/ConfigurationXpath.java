@@ -24,14 +24,10 @@ public class ConfigurationXpath {
 				key = keyIter.next();
 				String s = (String) config.getProperty(key);
 				map.put(key, s);
-				//System.out.println(key + " = " + s);
 			}
 		} catch (ConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		for (String keymap : map.keySet()){
-			System.out.println(keymap + map.get(keymap));
 		}
 		return map;
 	}

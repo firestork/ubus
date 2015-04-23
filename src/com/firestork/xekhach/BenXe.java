@@ -3,6 +3,7 @@ package com.firestork.xekhach;
 public class BenXe {
 
 	private long id;
+	private long idThanhPho;
 	private String name;
 	private String address;
 	
@@ -13,6 +14,12 @@ public class BenXe {
 	}
 	public void setId(long id) {
 		this.id = id;
+	}	
+	public long getIdThanhPho() {
+		return idThanhPho;
+	}
+	public void setIdThanhPho(long idThanhPho) {
+		this.idThanhPho = idThanhPho;
 	}
 	public String getName() {
 		return name;

@@ -1,5 +1,7 @@
 package com.firestork.cleaner;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,14 +13,15 @@ import org.htmlcleaner.XPatherException;
 
 import com.firestork.xekhach.BenXe;
 import com.firestork.xekhach.NhaXe;
+import com.firestork.xekhach.ThanhPho;
 import com.firestork.xekhach.TuyenXe;
 
 public class Cleaner {
 
-	public HashMap<Long, TuyenXe> map;
-	private HashMap<Long, TuyenXe> mapTuyenXe;
+	public HashMap<Long, TuyenXe> mapTuyenXe;
 	public HashMap<Long, NhaXe> mapNhaXe;
-	private HashMap<Long, BenXe> mapBenXe;
+	public HashMap<Long, BenXe> mapBenXe;
+	public HashMap<Long, ThanhPho> mapThanhPho;
 
 	public void parserCleaner(String html, HashMap<String, String> map,
 			HashMap<String, String> map1) throws XPatherException {
@@ -30,34 +33,42 @@ public class Cleaner {
 		props.setOmitComments(true);
 
 		TagNode node = null;
-		URL url;
 		try {
-			url = new URL(html);
-			node = cleaner.clean(url);
-		} catch (Exception e) {
+			node = cleaner.clean(new URL(html));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 		TuyenXe tuyenXe;
 		NhaXe nhaXe;
 		BenXe benXe;
+		ThanhPho thanhPho;
+
 		// xpath tất cả kết quả tìm được
 		String s = "//div[@class='result-list clearfix']";
+		           //div[@class='result-list clearfix']
 		int i = 1;
 		// tuyến xe đầu tiên tìm đc
 		int leng = node.evaluateXPath(s + "/div[1]").length;
-		System.out.println(leng);
 
 		mapTuyenXe = new HashMap<>();
 		mapNhaXe = new HashMap<>();
 		mapBenXe = new HashMap<>();
+		mapThanhPho = new HashMap<>();
 
 		// xây dựng map tuyến xe, nhà xe, bến xe.
 		while (leng > 0) {
+
 			tuyenXe = new TuyenXe();
 			nhaXe = new NhaXe();
 			nhaXe.listRoute = new ArrayList<>();
 			benXe = new BenXe();
+			thanhPho = new ThanhPho();
+			thanhPho.listBen = new ArrayList<>();
 
 			// id nhà xe
 			Object[] obj = node.evaluateXPath(s + "/div[" + i + "]"
@@ -82,56 +93,60 @@ public class Cleaner {
 					+ map.get("xekhach.operator-name"));
 			nhaXe.setTransportName(obj[0].toString());
 
-			// tên bến đi
+			// id thành phố đi
+			
+			obj = node.evaluateXPath(s+"/div["+i+"]/@fromstate-id");
+			
+			thanhPho.setId(Long.parseLong(obj[0].toString()));
+			benXe.setIdThanhPho(Long.parseLong(obj[0].toString()));
+
+			// tên thành phố đi
 			obj = node.evaluateXPath(s + "/div[" + i + "]"
 					+ map.get("xekhach.fromstop-name"));
-			benXe.setName(obj[0].toString());
+			thanhPho.setName(obj[0].toString());
 
 			// id bến đi
 			obj = node.evaluateXPath(s + "/div[" + i + "]"
 					+ map.get("xekhach.fromstop-id"));
 			tuyenXe.setFromStopID(Long.parseLong(obj[0].toString()));
 			benXe.setId(Long.parseLong(obj[0].toString()));
+			// thêm bến vào thành phố
+			if (mapThanhPho.get(benXe.getIdThanhPho()) == null) {
+				thanhPho.listBen.add(Long.parseLong(obj[0].toString()));
+			} else {
+				thanhPho.listBen = mapThanhPho.get(benXe.getIdThanhPho()).listBen;
+				thanhPho.listBen.add(Long.parseLong(obj[0].toString()));
+			}
 
 			mapBenXe.put(benXe.getId(), benXe);
+			mapThanhPho.put(thanhPho.getId(), thanhPho);
+			// id thành phố đến
+			obj = node.evaluateXPath(s+"/div["+i+"]/@tostate-id");
+			thanhPho.setId(Long.parseLong(obj[0].toString()));
+			benXe.setIdThanhPho(Long.parseLong(obj[0].toString()));
+
+			// tên thành phố đến
+			obj = node.evaluateXPath(s + "/div[" + i + "]"
+					+ map.get("xekhach.tostop-name"));
+			thanhPho.setName(obj[0].toString());
 
 			// id bến đến
 			obj = node.evaluateXPath(s + "/div[" + i + "]"
-					+ map.get("xekhach.tostop-id"));
-			tuyenXe.setTostopID(Long.parseLong(obj[0].toString()));
+					+ map.get("xekhach.fromstop-id"));
+			tuyenXe.setFromStopID(Long.parseLong(obj[0].toString()));
 			benXe.setId(Long.parseLong(obj[0].toString()));
-			
-			// tên bến đến
-			obj = node.evaluateXPath(s + "/div[" + i + "]"
-					+ map.get("xekhach.tostop-name"));
-			benXe.setName(obj[0].toString());
-			
-			mapBenXe.put(benXe.getId(), benXe);
+			// thêm bến vào thành phố
+			if (mapThanhPho.get(benXe.getIdThanhPho()) == null) {
+				thanhPho.listBen.add(Long.parseLong(obj[0].toString()));
+			} else {
+				thanhPho.listBen = mapThanhPho.get(benXe.getIdThanhPho()).listBen;
+				thanhPho.listBen.add(Long.parseLong(obj[0].toString()));
+			}
 
-			// đọc theo keymap, chưa ok
-			/*
-			 * for (String keymap : map.keySet()) {
-			 * 
-			 * Object[] o = node.evaluateXPath(s + "/div[" + i + "]" +
-			 * map.get(keymap)); switch (keymap) { case "xekhach.operator-id":
-			 * tuyenXe.setOperatorID(Long.parseLong(o[0].toString()));
-			 * 
-			 * nhaXe.setId(Long.parseLong(o[0].toString()));
-			 * System.out.println(tuyenXe.getOperatorID()); break; case
-			 * "xekhach.route-id":
-			 * tuyenXe.setRouteID(Long.parseLong(o[0].toString()));
-			 * nhaXe.listRoute.add(Long.parseLong(o[0].toString())); break; case
-			 * "xekhach.fromstop-id":
-			 * tuyenXe.setFromStopID(Long.parseLong(o[0].toString())); break;
-			 * case "xekhach.tostop-id":
-			 * tuyenXe.setTostopID(Long.parseLong(o[0].toString())); break; case
-			 * "xekhach.operator-name": nhaXe.setTransportName(o[0].toString());
-			 * break; case "xekhach.fromstop-name": break; default: break; }
-			 * 
-			 * }
-			 */
-			
-			//map1
+			mapBenXe.put(benXe.getId(), benXe);
+			mapThanhPho.put(thanhPho.getId(), thanhPho);
+
+			// map1
 			for (Object k : node
 					.evaluateXPath("//div[@class='result-list clearfix']/div["
 							+ i + "]")) {
