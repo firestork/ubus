@@ -1,5 +1,10 @@
 package com.firestork.xekhach;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -20,16 +25,17 @@ public class main {
 	/**
 	 * @param args
 	 * @throws XPatherException
+	 * @throws IOException
 	 */
 
-	public static void main(String[] args) throws XPatherException {
+	public static void main(String[] args) throws XPatherException, IOException {
 
 		ConfigurationXpath config = new ConfigurationXpath();
 		map = config.insertMap("config.xml");
 		map1 = config.insertMap("config1.xml");
 
-		Scanner scan = new Scanner(System.in);
-		System.out.println("Nhập link: ");
+		//Scanner scan = new Scanner(System.in);
+		//System.out.println("Nhập link: ");
 		// html = scan.nextLine();
 		html = "http://vexere.com/vi-VN/ve-xe-khach-tu-ha-noi-di-hai-phong-124t1271.html";
 		Cleaner cleaner = new Cleaner();
@@ -38,19 +44,34 @@ public class main {
 		mapBenXe = cleaner.mapBenXe;
 		mapTuyenXe = cleaner.mapTuyenXe;
 		mapNhaXe = cleaner.mapNhaXe;
-		
-		//xuất danh sách thành phố
-		for (Long key: mapThanhPho.keySet()){
-			System.out.println(mapThanhPho.get(key).getId()+"\t"+mapThanhPho.get(key).getName());
-		}
-		
-		//danh sách bến xe
-		
 
-		//danh sách nhà xe
-		
-		
-		//danh sách tuyến xe
+		ArrayList<Long> arr = new ArrayList<>();
+		// xuất danh sách thành phố
+
+		FileOutputStream out = new FileOutputStream("Thanhpho.text");
+
+		PrintWriter output = new PrintWriter(out, true);
+		for (Long key : mapThanhPho.keySet()) {
+
+			arr = mapThanhPho.get(key).getListBen();
+			System.out.println(mapThanhPho.get(key).getId() + "\t"
+					+ mapThanhPho.get(key).getName());
+			output.println(mapThanhPho.get(key).getId() + "\t"
+					+ mapThanhPho.get(key).getName());
+
+			
+			for (int i = 0; i < arr.size(); i++) {
+				System.out.println(arr.get(i));
+			}
+		}
+
+		out.close();
+		output.close();
+		// danh sách bến xe
+
+		// danh sách nhà xe
+
+		// danh sách tuyến xe
 
 	}
 
