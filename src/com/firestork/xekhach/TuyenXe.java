@@ -1,104 +1,152 @@
 package com.firestork.xekhach;
 
+import java.util.ArrayList;
+
 public class TuyenXe {
 
 	private long routeID;
 	private long operatorID;
 	private long fromStopID;
 	private long tostopID;
-	
+
 	private String routeName;
-	private String startTime;
-	private String stopTime;
+	private static ArrayList<Long> startTime;
+	private static  ArrayList<Long> stopTime;
 	private String totalTime;
 	private String price;
 	private String seatInfo;
-	private String benifit;
-	
-	
-	
-	public String getBenifit() {
+	private ArrayList<String> benifit;
+
+	public static String listFromTime() {
+		String str = "[";
+		for (int i = 0; i < startTime.size(); i++) {
+			if (i == startTime.size() - 1) {
+				str = str + startTime.get(i);
+			} else {
+				str = str + startTime.get(i) + " ";
+			}
+		}
+		str = str + "]";
+		return str;
+	}
+
+	public static String listStopTime() {
+		String str = "[";
+		for (int i = 0; i < stopTime.size(); i++) {
+			if (i == stopTime.size() - 1) {
+				str = str + stopTime.get(i);
+			} else {
+				str = str + stopTime.get(i) + " ";
+			}
+		}
+		str = str + "]";
+		return str;
+	}
+
+	public String listBenefit() {
+		String str = "[";
+		for (int i = 0; i < benifit.size(); i++) {
+			if (i == benifit.size() - 1) {
+				str = str + benifit.get(i);
+			} else {
+				str = str + benifit.get(i) + ",";
+			}
+		}
+		str = str + "]";
+		return str;
+	}
+
+	public ArrayList<Long> getStopTime() {
+		return stopTime;
+	}
+
+	public void setStopTime(ArrayList<Long> stopTime) {
+		this.stopTime = stopTime;
+	}
+
+	public ArrayList<Long> getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(ArrayList<Long> startTime) {
+		this.startTime = startTime;
+	}
+
+	public ArrayList<String> getBenifit() {
 		return benifit;
 	}
-	public void setBenifit(String benifit) {
+
+	public void setBenifit(ArrayList<String> benifit) {
 		this.benifit = benifit;
 	}
+
 	public long getRouteID() {
 		return routeID;
 	}
+
 	public void setRouteID(long routeID) {
 		this.routeID = routeID;
 	}
+
 	public long getOperatorID() {
 		return operatorID;
 	}
+
 	public void setOperatorID(long operatorID) {
 		this.operatorID = operatorID;
 	}
+
 	public long getFromStopID() {
 		return fromStopID;
 	}
+
 	public void setFromStopID(long fromStopID) {
 		this.fromStopID = fromStopID;
 	}
+
 	public long getTostopID() {
 		return tostopID;
 	}
+
 	public void setTostopID(long tostopID) {
 		this.tostopID = tostopID;
 	}
+
 	public String getRouteName() {
 		return routeName;
 	}
+
 	public void setRouteName(String routeName) {
 		this.routeName = routeName;
 	}
-	public String getStartTime() {
-		return startTime;
-	}
-	public void setStartTime(String startTime) {
-		this.startTime = startTime;
-	}
-	public String getStopTime() {
-		return stopTime;
-	}
-	public void setStopTime(String stopTime) {
-		this.stopTime = stopTime;
-	}
+
 	public String getTotalTime() {
 		return totalTime;
 	}
+
 	public void setTotalTime(String totalTime) {
 		this.totalTime = totalTime;
 	}
+
 	public String getPrice() {
 		return price;
 	}
+
 	public void setPrice(String price) {
 		this.price = price;
 	}
+
 	public String getSeatInfo() {
 		return seatInfo;
 	}
+
 	public void setSeatInfo(String seatInfo) {
 		this.seatInfo = seatInfo;
 	}
-	public TuyenXe(long routeID, long operatorID, long fromStopID,
-			long tostopID, String routeName, String startTime, String stopTime,
-			String totalTime, String price, String seatInfo) {
-		this.routeID = routeID;
-		this.operatorID = operatorID;
-		this.fromStopID = fromStopID;
-		this.tostopID = tostopID;
-		this.routeName = routeName;
-		this.startTime = startTime;
-		this.stopTime = stopTime;
-		this.totalTime = totalTime;
-		this.price = price;
-		this.seatInfo = seatInfo;
-	}
+
 	public TuyenXe() {
 	}
+
 	@Override
 	public String toString() {
 		return "TuyenXe [routeID=" + routeID + ", operatorID=" + operatorID
@@ -107,6 +155,5 @@ public class TuyenXe {
 				+ ", stopTime=" + stopTime + ", totalTime=" + totalTime
 				+ ", price=" + price + ", seatInfo=" + seatInfo + "]";
 	}
-	
-	
+
 }

@@ -1,6 +1,10 @@
 package com.firestork.cleaner;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -14,280 +18,592 @@ import org.htmlcleaner.TagNode;
 import org.htmlcleaner.XPatherException;
 
 import com.firestork.xekhach.BenXe;
+import com.firestork.xekhach.LoTrinh;
 import com.firestork.xekhach.NhaXe;
 import com.firestork.xekhach.ThanhPho;
 import com.firestork.xekhach.TuyenXe;
 
 public class Cleaner {
 
-	public HashMap<Long, TuyenXe> mapTuyenXe;
-	public HashMap<Long, NhaXe> mapNhaXe;
-	public HashMap<Long, BenXe> mapBenXe;
-	public HashMap<Long, ThanhPho> mapThanhPho;
+	private HashMap<Long, TuyenXe> mapTuyenXe;
+	private HashMap<Long, NhaXe> mapNhaXe;
+	private HashMap<Long, BenXe> mapBenXe;
+	private HashMap<Long, ThanhPho> mapThanhPho;
+	private HashMap<Long, LoTrinh> mapLoTrinh;
+	public FileOutputStream fileOut, fileError;
+	private PrintWriter output;
+	private PrintWriter outputError;
+	private String time;
+	private FileOutputStream out;
 
-	public void parserCleaner(String html, HashMap<String, String> map,
-			HashMap<String, String> map1) throws XPatherException {
+	public HashMap<Long, TuyenXe> getMapTuyenXe() {
+		return mapTuyenXe;
+	}
+
+	public void setMapTuyenXe(HashMap<Long, TuyenXe> mapTuyenXe) {
+		this.mapTuyenXe = mapTuyenXe;
+	}
+
+	public HashMap<Long, NhaXe> getMapNhaXe() {
+		return mapNhaXe;
+	}
+
+	public void setMapNhaXe(HashMap<Long, NhaXe> mapNhaXe) {
+		this.mapNhaXe = mapNhaXe;
+	}
+
+	public HashMap<Long, BenXe> getMapBenXe() {
+		return mapBenXe;
+	}
+
+	public void setMapBenXe(HashMap<Long, BenXe> mapBenXe) {
+		this.mapBenXe = mapBenXe;
+	}
+
+	public HashMap<Long, ThanhPho> getMapThanhPho() {
+		return mapThanhPho;
+	}
+
+	public void setMapThanhPho(HashMap<Long, ThanhPho> mapThanhPho) {
+		this.mapThanhPho = mapThanhPho;
+	}
+
+	public HashMap<Long, LoTrinh> getMapLoTrinh() {
+		return mapLoTrinh;
+	}
+
+	public void setMapLoTrinh(HashMap<Long, LoTrinh> mapLoTrinh) {
+		this.mapLoTrinh = mapLoTrinh;
+	}
+
+	public void LayDuLieu(HashMap<String, String> map,
+			HashMap<String, String> map1) throws IOException, XPatherException {
 
 		mapTuyenXe = new HashMap<>();
 		mapNhaXe = new HashMap<>();
 		mapBenXe = new HashMap<>();
 		mapThanhPho = new HashMap<>();
+		mapLoTrinh = new HashMap<>();
+
+		ThanhPho thanhPho = new ThanhPho();
+		ArrayList<ThanhPho> listThanhPho = new ArrayList<>();
 		String html1 = null;
-		Scanner scan = new Scanner(System.in);
-		System.out.println("Nhập link: ");
-		html1 = scan.nextLine();
-		while ((!html1.equals("k"))&& (!html1.equals(""))) {
 
-			HtmlCleaner cleaner = new HtmlCleaner();
-			CleanerProperties props = cleaner.getProperties();
-			props.setAllowHtmlInsideAttributes(false);
-			props.setAllowMultiWordAttributes(true);
-			props.setRecognizeUnicodeChars(true);
-			props.setOmitComments(true);
+		thanhPho.setId(1);
+		thanhPho.setName("An Giang");
+		thanhPho.setLink("an-giang");
+		listThanhPho.add(thanhPho);
 
-			TagNode node = null;
-			try {
-				node = cleaner.clean(new URL(html1));
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		// lấy dữ liệu từ map thành phố đã tạo
+
+		FileInputStream file = new FileInputStream("Thanhpho.text");
+		Scanner input = new Scanner(file, "UTF-8");
+
+		int count = 0;
+		input.nextLine();
+		while (input.hasNextLine()) {
+			count = 0;
+			thanhPho = new ThanhPho();
+			for (String rs : input.nextLine().split("[\t]")) {
+
+				count = count + 1;
+
+				try {
+
+					if (count == 1) {
+						thanhPho.setId(Long.parseLong(rs));
+
+					}
+				} catch (NumberFormatException e) {
+					// TODO: handle exception
+				}
+
+				if (count == 2) {
+					thanhPho.setName(rs);
+				}
+				if (count == 3) {
+					thanhPho.setLink(rs);
+				}
 			}
+			listThanhPho.add(thanhPho);
 
-			boolean kt = true;
-			TuyenXe tuyenXe;
-			NhaXe nhaXe;
-			BenXe benXe;
-			ThanhPho thanhPho;
+		}
+		file.close();
+		input.close();
 
-			// xpath tất cả kết quả tìm được
-			String s = "//div[@class='result-list clearfix']";
-			// div[@class='result-list clearfix']
-			int i = 1;
-			// tuyến xe đầu tiên tìm đc
-			int leng = node.evaluateXPath(s + "/div[1]").length;
-			System.out.println(leng);
-		
+		System.out.println(listThanhPho.size());
 
-			// kiểm tra kết quả trống (ko có tuyến xe nào)
-			
-			//if node.evaluateXPath(s+"/div[1]").
-			
-			// xây dựng map tuyến xe, nhà xe, bến xe.
-			while (leng > 0) {
+		out = new FileOutputStream("TuyenXe.text");
+		output = new PrintWriter(out, true);
+		for (int i = 0; i < listThanhPho.size() - 1; i++) {
+			for (int j = i + 1; j < listThanhPho.size(); j++) {
+				// for (int j = 26; j <= 26; j++) {
+				// int j = 23;
+				// System.out.println(i + "->" + j);
+				if (listThanhPho.get(i).getId() != listThanhPho.get(j).getId()) {
+					System.out.println(listThanhPho.get(i).getId() + "->"
+							+ listThanhPho.get(j).getId());
+					html1 = "http://vexere.com/vi-VN/ve-xe-khach-tu-"
+							+ listThanhPho.get(i).getLink() + "-di-"
+							+ listThanhPho.get(j).getLink()
+							+ "-ngay-09-05-2015-1"
+							+ listThanhPho.get(i).getId() + "t1"
+							+ listThanhPho.get(j).getId() + "1.html";
 
-				tuyenXe = new TuyenXe();
-				nhaXe = new NhaXe();
-				nhaXe.listRoute = new ArrayList<>();
-				benXe = new BenXe();
-				thanhPho = new ThanhPho();
-				thanhPho.listBen = new ArrayList<>();
+					System.out.println(html1);
+					// fileOut = new FileOutputStream("BenXe.text");
+					// fileError = new FileOutputStream("Error.text");
+					// output = new PrintWriter(fileOut, true);
+					// outputError = new PrintWriter(fileError, true);
+					parserCleaner(html1, map, map1);
 
-				Object[] obj = null;
-				/*
-				 * // id nhà xe Object[] obj = node.evaluateXPath(s + "/div[" +
-				 * i + "]" + map.get("xekhach.operator-id"));
-				 * tuyenXe.setOperatorID(Long.parseLong(obj[0].toString()));
-				 * 
-				 * // id tuyen xe obj = node.evaluateXPath(s + "/div[" + i + "]"
-				 * + map.get("xekhach.route-id"));
-				 * tuyenXe.setRouteID(Long.parseLong(obj[0].toString()));
-				 * 
-				 * // thêm tuyến vào nhà xe if
-				 * (mapNhaXe.get(tuyenXe.getOperatorID()) == null) {
-				 * nhaXe.listRoute.add(Long.parseLong(obj[0].toString())); }
-				 * else { nhaXe.listRoute =
-				 * mapNhaXe.get(tuyenXe.getOperatorID()).listRoute;
-				 * nhaXe.listRoute.add(Long.parseLong(obj[0].toString())); }
-				 * 
-				 * // tên nhà xe obj = node.evaluateXPath(s + "/div[" + i + "]"
-				 * + map.get("xekhach.operator-name"));
-				 * nhaXe.setTransportName(obj[0].toString());
-				 */
+				}
+			}
+		}
+		out.close();
+		output.close();
+		// fileOut.close();
+		// fileError.close();
+		// output.close();
+		// }
+
+	}
+
+	public void parserCleaner(String html, HashMap<String, String> map,
+			HashMap<String, String> map1) throws XPatherException, IOException {
+
+		ThanhPho thanhPho = new ThanhPho();
+
+		HtmlCleaner cleaner = new HtmlCleaner();
+		CleanerProperties props = cleaner.getProperties();
+		props.setAllowHtmlInsideAttributes(false);
+		props.setAllowMultiWordAttributes(true);
+		props.setRecognizeUnicodeChars(true);
+		props.setOmitComments(true);
+
+		TagNode node = null;
+
+		try {
+			node = cleaner.clean(new URL(html));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		String str = null;
+		boolean kt = true;
+		TuyenXe tuyenXe;
+		NhaXe nhaXe;
+		BenXe benXeDi, benXeDen;
+		LoTrinh loTrinh;
+
+		// xpath tất cả kết quả tìm được
+		String s = "//div[@class='result-list clearfix']";
+		// div[@class='result-listclearfix']
+		int k = 1;
+		// tuyến xe đầu tiên tìm đc
+		int leng = node.evaluateXPath(s + "/div[1]").length;
+
+		// xây dựng map tuyến xe, nhà xe, bến xe.
+		while (leng > 0) {
+			System.out.println("Tuyen: " + k);
+			tuyenXe = new TuyenXe();
+			ArrayList<Long> startTime = new ArrayList<>();
+			ArrayList<Long> stopTime = new ArrayList<>();
+			nhaXe = new NhaXe();
+			nhaXe.listRoute = new ArrayList<>();
+			benXeDi = new BenXe();
+			thanhPho = new ThanhPho();
+			thanhPho.listBen = new ArrayList<>();
+			loTrinh = new LoTrinh();
+
+			String xpath;
+			Object[] obj = null;
+			try {
 
 				// id thành phố đi
+				xpath = s + "/div[" + k + "]/@fromstate-id";
+				if (node.evaluateXPath(xpath).length != 0) {
 
-				obj = node.evaluateXPath(s + "/div[" + i + "]/@fromstate-id");
+					obj = node.evaluateXPath(xpath);
+					thanhPho.setId(Long.parseLong(obj[0].toString()));
+					benXeDi.setIdThanhPho(Long.parseLong(obj[0].toString()));
 
-				thanhPho.setId(Long.parseLong(obj[0].toString()));
-				benXe.setIdThanhPho(Long.parseLong(obj[0].toString()));
+					/*
+					 * // tên thành phố đi
+					 * 
+					 * obj = node.evaluateXPath(s + "/div[" + k + "]" +
+					 * map.get("xekhach.fromstop-name"));
+					 * thanhPho.setName(StringEscapeUtils.unescapeHtml(obj[0]
+					 * .toString()));
+					 */
 
-				// tên thành phố đi
-				obj = node.evaluateXPath(s + "/div[" + i + "]"
-						+ map.get("xekhach.fromstop-name"));
-				thanhPho.setName(StringEscapeUtils.unescapeHtml(obj[0]
-						.toString()));
+					// id bến đi
+					obj = node.evaluateXPath(s + "/div[" + k + "]"
+							+ map.get("xekhach.fromstop-id"));
+					tuyenXe.setFromStopID(Long.parseLong(obj[0].toString()));
+					benXeDi.setId(Long.parseLong(obj[0].toString()));
 
-				// id bến đi
-				obj = node.evaluateXPath(s + "/div[" + i + "]"
-						+ map.get("xekhach.fromstop-id"));
-				tuyenXe.setFromStopID(Long.parseLong(obj[0].toString()));
-				benXe.setId(Long.parseLong(obj[0].toString()));
-				// thêm bến đi vào thành phố đi
+					// tên bến đi
 
-				if (mapThanhPho.get(benXe.getIdThanhPho()) == null) {
-					thanhPho.listBen.add(Long.parseLong(obj[0].toString()));
-				} else {
-					thanhPho.listBen = mapThanhPho.get(benXe.getIdThanhPho()).listBen;
-					kt = true;
+					for (Object o : node.evaluateXPath(s + "/div[" + k + "]"
+							+ map1.get("xekhach.depart-station"))) {
+						benXeDi.setName(StringEscapeUtils
+								.unescapeHtml(((TagNode) o).getText()
+										.toString()));
+					}
 
-					// kiểm tra xem bến có trong thành phố đó chưa?
-					for (int j = 0; j < thanhPho.listBen.size(); j++) {
-						if (thanhPho.listBen.get(j) == Long.parseLong(obj[0]
-								.toString())) {
-							kt = false;
-							break;
+					// địa chỉ bến đi
+
+					for (Object o : node.evaluateXPath(s + "/div[" + k + "]"
+							+ map1.get("xekhach.depart-station-add"))) {
+						str = StringEscapeUtils.unescapeHtml(((TagNode) o)
+								.getText().toString());
+						str = str.trim();
+						str = str.replaceAll("\\s+", " ");
+						benXeDi.setAddress(str);
+					}
+
+					/*
+					 * // thêm bến đi vào thành phố đi
+					 * 
+					 * if (mapThanhPho.get(benXeDi.getIdThanhPho()) == null) {
+					 * thanhPho.listBen.add(Long.parseLong(obj[0].toString()));
+					 * } else { thanhPho.listBen =
+					 * mapThanhPho.get(benXeDi.getIdThanhPho()).listBen; kt =
+					 * true;
+					 * 
+					 * // kiểm tra xem bến có trong thành phố đó chưa? for (int
+					 * l = 0; l < thanhPho.listBen.size(); l++) { if
+					 * (thanhPho.listBen.get(l) == Long.parseLong(obj[0]
+					 * .toString())) { kt = false; break; }
+					 * 
+					 * }
+					 * 
+					 * if (kt) {
+					 * thanhPho.listBen.add(Long.parseLong(obj[0].toString()));
+					 * }
+					 * 
+					 * }
+					 */
+
+					if (mapBenXe.get(benXeDi.getId()) == null) {
+						mapBenXe.put(benXeDi.getId(), benXeDi);
+
+						// System.out.println(benXeDi.getId() + "\t"
+						// + benXeDi.getIdThanhPho() + "\t"
+						// + benXeDi.getName() + "\t" + benXeDi.getAddress());
+					}
+
+					thanhPho = new ThanhPho();
+					thanhPho.listBen = new ArrayList<>();
+					benXeDen = new BenXe();
+
+					// id thành phố đến
+					obj = node.evaluateXPath(s + "/div[" + k + "]/@tostate-id");
+					thanhPho.setId(Long.parseLong(obj[0].toString()));
+					benXeDen.setIdThanhPho(Long.parseLong(obj[0].toString()));
+
+					// tên thành phố đến
+					obj = node.evaluateXPath(s + "/div[" + k + "]"
+							+ map.get("xekhach.tostop-name"));
+					thanhPho.setName(StringEscapeUtils.unescapeHtml(obj[0]
+							.toString()));
+
+					// id bến đến
+					obj = node.evaluateXPath(s + "/div[" + k + "]"
+							+ map.get("xekhach.tostop-id"));
+					tuyenXe.setTostopID(Long.parseLong(obj[0].toString()));
+					benXeDen.setId(Long.parseLong(obj[0].toString()));
+
+					// tên bến đến
+
+					for (Object o : node.evaluateXPath(s + "/div[" + k + "]"
+							+ map1.get("xekhach.destination-station"))) {
+						benXeDen.setName(StringEscapeUtils
+								.unescapeHtml(((TagNode) o).getText()
+										.toString()));
+					}
+
+					// địa chỉ bến đến
+
+					for (Object o : node.evaluateXPath(s + "/div[" + k + "]"
+							+ map1.get("xekhach.destination-station-add"))) {
+						str = StringEscapeUtils.unescapeHtml(((TagNode) o)
+								.getText().toString());
+						str = str.trim();
+						str = str.replaceAll("\\s+", " ");
+						benXeDen.setAddress(str);
+					}
+
+					/*
+					 * // thêm bến đến vào thành phố đến
+					 * 
+					 * if (mapThanhPho.get(benXeDen.getIdThanhPho()) == null) {
+					 * thanhPho.listBen.add(Long.parseLong(obj[0].toString()));
+					 * } else { thanhPho.listBen = mapThanhPho
+					 * .get(benXeDen.getIdThanhPho()).listBen; kt = true;
+					 * 
+					 * // kiểm tra xem bến có trong thành phố đó chưa? for (int
+					 * l = 0; l < thanhPho.listBen.size(); l++) { if
+					 * (thanhPho.listBen.get(l) == Long.parseLong(obj[0]
+					 * .toString())) { kt = false; break; }
+					 * 
+					 * }
+					 * 
+					 * if (kt) {
+					 * thanhPho.listBen.add(Long.parseLong(obj[0].toString()));
+					 * }
+					 * 
+					 * }
+					 */
+
+					if (mapBenXe.get(benXeDen.getId()) == null) {
+						mapBenXe.put(benXeDen.getId(), benXeDen);
+
+						// System.out
+						// .println(benXeDen.getId() + "\t"
+						// + benXeDen.getIdThanhPho() + "\t"
+						// + benXeDen.getName() + "\t"
+						// + benXeDen.getAddress());
+					}
+
+					nhaXe = new NhaXe();
+
+					// id nhà xe
+					try {
+
+						obj = node.evaluateXPath(s + "/div[" + k + "]"
+								+ map.get("xekhach.operator-id"));
+						nhaXe.setId(Long.parseLong(obj[0].toString()));
+						tuyenXe.setOperatorID(Long.parseLong(obj[0].toString()));
+					} catch (Exception e) {
+						System.out.println("Lỗi id nhà xe");
+					}
+
+					// tên nhà xe
+
+					for (Object o : node.evaluateXPath(s + "/div[" + k + "]"
+							+ map1.get("xekhach.transporter-name"))) {
+						nhaXe.setTransportName(StringEscapeUtils
+								.unescapeHtml(((TagNode) o).getText()
+										.toString()));
+					}
+
+					if (mapNhaXe.get(nhaXe.getId()) == null) {
+						mapNhaXe.put(nhaXe.getId(), nhaXe);
+
+						// System.out.println(nhaXe.getId() + "\t"
+						// +nhaXe.getTransportName());
+					}
+					// sdt nhà xe
+
+					// id tuyến xe
+
+					obj = node.evaluateXPath(s + "/div[" + k + "]"
+							+ map.get("xekhach.route-id"));
+					tuyenXe.setRouteID(Long.parseLong(obj[0].toString()));
+					loTrinh.setRouterID(Long.parseLong(obj[0].toString()));
+
+					if (mapTuyenXe.get(tuyenXe.getRouteID()) != null) {
+						startTime = mapTuyenXe.get(tuyenXe.getRouteID())
+								.getStartTime();
+						stopTime = mapTuyenXe.get(tuyenXe.getRouteID())
+								.getStopTime();
+						System.out.println("Trung tuyến: "
+								+ listFromTime(startTime)
+								+ listFromTime(stopTime));
+					}
+
+					// tiện ích của tuyến xe
+					ArrayList<String> listBenifit = new ArrayList<>();
+
+					try {
+						for (Object o : node.evaluateXPath(s + "/div[" + k
+								+ "]" + map1.get("xekhach.seat-info"))) {
+							listBenifit.add(StringEscapeUtils
+									.unescapeHtml(((TagNode) o).getText()
+											.toString()));
+						}
+						for (Object o : node.evaluateXPath(s + "/div[" + k
+								+ "]" + map1.get("xekhach.benifit"))) {
+							listBenifit.add(StringEscapeUtils
+									.unescapeHtml(((TagNode) o).getText()
+											.toString()));
+						}
+					} catch (Exception e) {
+						System.out.println("Lỗi tiện ích");
+					}
+					tuyenXe.setBenifit(listBenifit);
+
+					// thời gian đi tuyến xe
+					if (node.evaluateXPath(s + "/div[" + k + "]"
+							+ map1.get("xekhach.start-time")).length != 0) {
+
+						for (Object o : node.evaluateXPath(s + "/div[" + k
+								+ "]" + map1.get("xekhach.start-time"))) {
+							time = StringEscapeUtils.unescapeHtml(((TagNode) o)
+									.getText().toString());
+							// System.out.println(time);
+
+						}
+					} else {
+						for (Object o : node
+								.evaluateXPath(s
+										+ "/div["
+										+ k
+										+ "]"
+										+ "//div[@class='depart-info-col fl-l clearfix']/div[@class='input-set fl-l']/span")) {
+							time = StringEscapeUtils.unescapeHtml(((TagNode) o)
+									.getText().toString());
+						}
+						System.out.println(time);
+					}
+
+					tuyenXe.setStartTime(listTime(time, startTime));
+
+					// thời gian đến tuyến xe
+					if (node.evaluateXPath(s + "/div[" + k + "]"
+							+ map1.get("xekhach.stop-time")).length != 0) {
+
+						for (Object o : node.evaluateXPath(s + "/div[" + k
+								+ "]" + map1.get("xekhach.stop-time"))) {
+							time = StringEscapeUtils.unescapeHtml(((TagNode) o)
+									.getText().toString());
+							// System.out.println(time);
+
+						}
+					} else {
+
+						for (Object o : node
+								.evaluateXPath(s
+										+ "/div["
+										+ k
+										+ "]"
+										+ "//div[@class='destination-info-col fl-l']/div[@class='input-set fl-l']/span")) {
+							time = StringEscapeUtils.unescapeHtml(((TagNode) o)
+									.getText().toString());
+							System.out.println(time);
 						}
 
 					}
+					tuyenXe.setStopTime(listTime(time, stopTime));
 
-					if (kt) {
-						thanhPho.listBen.add(Long.parseLong(obj[0].toString()));
-					}
-
-				}
-
-				mapBenXe.put(benXe.getId(), benXe);
-				if (mapThanhPho.get(thanhPho.getId()) == null) {
-
-					mapThanhPho.put((thanhPho.getId()), thanhPho);
-					System.out.println(thanhPho.getId() + "\t"
-							+ thanhPho.getName());
-				}
-
-				// id thành phố đến
-				thanhPho = new ThanhPho();
-				thanhPho.listBen = new ArrayList<>();
-				benXe = new BenXe();
-
-				obj = node.evaluateXPath(s + "/div[" + i + "]/@tostate-id");
-				thanhPho.setId(Long.parseLong(obj[0].toString()));
-				benXe.setIdThanhPho(Long.parseLong(obj[0].toString()));
-
-				// tên thành phố đến
-				obj = node.evaluateXPath(s + "/div[" + i + "]"
-						+ map.get("xekhach.tostop-name"));
-				thanhPho.setName(StringEscapeUtils.unescapeHtml(obj[0]
-						.toString()));
-
-				// id bến đến
-				obj = node.evaluateXPath(s + "/div[" + i + "]"
-						+ map.get("xekhach.tostop-id"));
-				tuyenXe.setFromStopID(Long.parseLong(obj[0].toString()));
-				benXe.setId(Long.parseLong(obj[0].toString()));
-
-				// thêm bến đến vào thành phố đến
-
-				if (mapThanhPho.get(benXe.getIdThanhPho()) == null) {
-					thanhPho.listBen.add(Long.parseLong(obj[0].toString()));
-				} else {
-					thanhPho.listBen = mapThanhPho.get(benXe.getIdThanhPho()).listBen;
-					kt = true;
-
-					// kiểm tra xem bến có trong thành phố đó chưa?
-					for (int j = 0; j < thanhPho.listBen.size(); j++) {
-						if (thanhPho.listBen.get(j) == Long.parseLong(obj[0]
-								.toString())) {
-							kt = false;
-							break;
-						}
-
-					}
-
-					if (kt) {
-						thanhPho.listBen.add(Long.parseLong(obj[0].toString()));
-					}
-
-				}
-				// System.out.println(benXe.getId());
-
-				mapBenXe.put(benXe.getId(), benXe);
-				if (mapThanhPho.get(thanhPho.getId()) == null) {
-
-					mapThanhPho.put(thanhPho.getId(), thanhPho);
-					System.out.println(thanhPho.getId() + "\t"
-							+ thanhPho.getName());
-				}
-
-				// map1
-				/*for (Object k : node
-						.evaluateXPath("//div[@class='result-list clearfix']/div["
-								+ i + "]")) {
-					for (String keymap : map1.keySet()) {
-						// System.out.println(keymap);
-						switch (keymap) {
-
-						case "xekhach.route-name":
-							for (Object o : ((TagNode) k).evaluateXPath(map1
-									.get(keymap))) {
-								tuyenXe.setRouteName(((TagNode) o).getText()
-										.toString());
-							}
-							break;
-						case "xekhach.start-time":
-							for (Object o : ((TagNode) k).evaluateXPath(map1
-									.get(keymap))) {
-								tuyenXe.setStartTime(((TagNode) o).getText()
-										.toString());
-								// System.out.println(tuyenXe.getStartTime());
-							}
-							break;
-						case "xekhach.stop-time":
-							for (Object o : ((TagNode) k).evaluateXPath(map1
-									.get(keymap))) {
-								tuyenXe.setStopTime(((TagNode) o).getText()
-										.toString());
-							}
-							break;
-						case "xekhach.total-time":
-							for (Object o : ((TagNode) k).evaluateXPath(map1
-									.get(keymap))) {
-								tuyenXe.setTotalTime(((TagNode) o).getText()
-										.toString());
-							}
-							break;
-						case "xekhach.price":
-							for (Object o : ((TagNode) k).evaluateXPath(map1
-									.get(keymap))) {
-								tuyenXe.setPrice(((TagNode) o).getText()
-										.toString());
-							}
-							break;
-						case "xekhach.seat-info":
-							for (Object o : ((TagNode) k).evaluateXPath(map1
-									.get(keymap))) {
-								tuyenXe.setSeatInfo(((TagNode) o).getText()
-										.toString());
-							}
-							break;
-						case "xekhach.benifit":
-							for (Object o : ((TagNode) k).evaluateXPath(map1
-									.get(keymap))) {
-								tuyenXe.setBenifit(((TagNode) o).getText()
-										.toString());
-								// System.out.println(((TagNode) o).getText());
-							}
-							break;
-						default:
-							break;
-						}
-
-					}
+					// if (mapTuyenXe.get(tuyenXe.getRouteID()) == null) {
 					mapTuyenXe.put(tuyenXe.getRouteID(), tuyenXe);
-					mapNhaXe.put(nhaXe.getId(), nhaXe);
-					i = i + 1;
-					leng = node.evaluateXPath(s + "/div[" + i + "]").length;
-				}*/
-				i = i + 1;
-				leng = node.evaluateXPath(s + "/div[" + i + "]").length;
-				
-			}
 
-			System.out.println("Nhập link: ");
-			html1 = scan.nextLine();
+					output.println(tuyenXe.getRouteID()
+							+ "\t"
+							+ mapTuyenXe.get(tuyenXe.getRouteID())
+									.getOperatorID()
+							+ "\t"
+							+ mapTuyenXe.get(tuyenXe.getRouteID())
+									.getFromStopID()
+							+ "\t"
+							+ mapTuyenXe.get(tuyenXe.getRouteID())
+									.getTostopID()
+							+ "\t"
+							+ mapTuyenXe.get(tuyenXe.getRouteID())
+									.listBenefit()
+							+ "\t"
+							+ mapTuyenXe.get(tuyenXe.getRouteID())
+									.listFromTime()
+							+ "\t"
+							+ mapTuyenXe.get(tuyenXe.getRouteID())
+									.listStopTime());
+					System.out.println(tuyenXe.getRouteID()
+							+ "\t"
+							+ mapTuyenXe.get(tuyenXe.getRouteID())
+									.getOperatorID()
+							+ "\t"
+							+ mapTuyenXe.get(tuyenXe.getRouteID())
+									.getFromStopID()
+							+ "\t"
+							+ mapTuyenXe.get(tuyenXe.getRouteID())
+									.getTostopID()
+							+ "\t"
+							+ mapTuyenXe.get(tuyenXe.getRouteID())
+									.listBenefit()
+							+ "\t"
+							+ mapTuyenXe.get(tuyenXe.getRouteID())
+									.listFromTime()
+							+ "\t"
+							+ mapTuyenXe.get(tuyenXe.getRouteID())
+									.listStopTime());
+					// }
+
+					// tên điểm dừng
+
+					// sdt điểm dừng
+
+					// địa chỉ điểm dừng
+
+					// thời gian dừng
+				}
+			} catch (XPatherException e) {
+				System.out.println("Không có kết quả " + e.getMessage());
+				// outputError.println(html);
+			}
+			k = k + 1;
+			leng = node.evaluateXPath(s + "/div[" + k + "]").length;
 		}
 
 	}
+
+	public static ArrayList<Long> listTime(String time, ArrayList<Long> list) {
+		time = time.trim();
+		// ArrayList<Long> list = new ArrayList<>();
+		int dem = 0;
+		long tgu = 0;
+		long tg = 0;
+		// System.out.println(time);
+		// System.out.println(Long.parseLong("20"));
+		for (String thoigian : time.split("[\n]")) {
+			thoigian = thoigian.trim();
+			thoigian = thoigian.replaceAll("\\s+", " ");
+			dem = 0;
+			for (String q : thoigian.split("[:]")) {
+				if (q != null) {
+
+					dem = dem + 1;
+					try {
+
+						if (dem == 1) {
+							tgu = Long.parseLong(q) * 3600;
+						} else if (dem == 2) {
+							tg = Long.parseLong(q) * 60;
+						}
+
+					} catch (Exception e) {
+
+					}
+					// System.out.println(q);
+				}
+
+			}
+			list.add(tgu + tg);
+			// System.out.println(thoigian + ": " + tgu + tg);
+		}
+
+		System.out.println(listFromTime(list));
+		return list;
+
+	}
+
+	public static String listFromTime(ArrayList<Long> startTime) {
+		String str = "[";
+		for (int i = 0; i < startTime.size(); i++) {
+			if (i == startTime.size() - 1) {
+				str = str + startTime.get(i);
+			} else {
+				str = str + startTime.get(i) + " ";
+			}
+		}
+		str = str + "]";
+		return str;
+	}
+
 }

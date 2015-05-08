@@ -7,8 +7,16 @@ public class ThanhPho {
 	private long id;
 	private String name;
 	public ArrayList<Long> listBen; 
+	private String link;
 	
 	
+	
+	public String getLink() {
+		return link;
+	}
+	public void setLink(String link) {
+		this.link = link;
+	}
 	public long getId() {
 		return id;
 	}

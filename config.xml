@@ -11,8 +11,9 @@
         <tostop-id>@tostop-id</tostop-id>
         <fromstop-name>/@fromstop-name</fromstop-name>
         <tostop-name>/@tostop-name</tostop-name>
-        <fromstate-id>@/fromstate-id</fromstate-id>
-        <tostate-id>@/tostate-id</tostate-id>
+        <fromstate-id>/@fromstate-id</fromstate-id>
+        <tostate-id>/@tostate-id</tostate-id>
+        <depart-station>//div[@class='depart-station hidden-xs']/p/@data-value</depart-station>
         
       <!--   <ten-nha-xe>//div[@class='transporter-col wd-160 fl-l']/p[@class='transporter-name']</ten-nha-xe>
         <diem-di>//div[@class='depart-station rel-pos fl-l']/p</diem-di>

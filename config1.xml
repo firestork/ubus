@@ -3,12 +3,17 @@
 <config>
     <xekhach>
         
+        <transporter-name>//div[@class='transporter-col fl-l']/p[@class='transporter-name']</transporter-name>
         <route-name>//div[@class='transporter-col wd-160 fl-l']/p[@class='route']</route-name>
 		<start-time>//*[@id='FromTimes']</start-time>
 		<stop-time>//*[@id='ToTimes']</stop-time>
 		<total-time>//div[@class='input-set rel-pos clearfix clr']/p</total-time>
 		<price>//div[@class='price-col rel-pos wd-130 mg-l-15 fl-l']/p</price>
-		<seat-info>//div[@class='benefit-col wd-200 mg-l-15 fl-l']/p[@class='seat-info']</seat-info>
-       	<benifit>//div[@class='benefit-label clearfix']</benifit>
+		<seat-info>//div[@class='benefit-col mg-l-15 fl-l hidden-xs']/p</seat-info>
+       	<benifit>//div[@class='benefit-label clearfix']//p</benifit>
+       	<depart-station>//div[@class='depart-station hidden-xs']//div[@class='station-info pd-5-10']/p[1]</depart-station>
+       	<depart-station-add>//div[@class='depart-station hidden-xs']//p[@class='address']</depart-station-add>
+       	<destination-station>//div[@class='destination-station hidden-xs']//div[@class='station-info pd-5-10']/p[1]</destination-station>
+       	<destination-station-add>//div[@class='destination-station hidden-xs']//p[@class='address']</destination-station-add>
     </xekhach>
 </config>
