@@ -1,0 +1,7 @@
+﻿Thành Phố: "id+\t+name+\t+nameLink"
+Bến Xe: "id+\t+name+\t+Adress"
+Nhà Xe: "id+\t+name"
+Tuyến Xe: "id+\t+idNhaXe+\t+idFromStop+\t+idToStop+\t+[list tiện ích]+\t+[list thời gian đi]+\t+[list thời gian đến]"
+
+list tiện ích: [tiện ích 1, tiện ich 2,v.v...]
+list thời gian: [thời gian 1+\t+thời gian 2 +\t+v.v....]
