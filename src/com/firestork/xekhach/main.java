@@ -19,10 +19,11 @@ public class main {
 
 	private static String html;
 	private static HashMap<String, String> map, map1;
-	private static HashMap<Long, TuyenXe> mapTuyenXe;
+	private static HashMap<Long, ArrayList<TuyenXe>> mapTuyenXe;
 	private static HashMap<Long, NhaXe> mapNhaXe;
 	private static HashMap<Long, BenXe> mapBenXe;
 	private static HashMap<Long, ThanhPho> mapThanhPho;
+	private static HashMap<Long, ArrayList<LoTrinh>> mapLoTrinh;
 
 	/**
 	 * @param args
@@ -48,6 +49,7 @@ public class main {
 		mapBenXe = cleaner.getMapBenXe();
 		mapTuyenXe = cleaner.getMapTuyenXe();
 		mapNhaXe = cleaner.getMapNhaXe();
+		mapLoTrinh = cleaner.getMapLoTrinh();
 
 		ArrayList<Long> arr = new ArrayList<>();
 		// xuất danh sách thành phố ~> done
@@ -104,28 +106,66 @@ public class main {
 		out.close();
 		output.close();
 
-		/*out = new FileOutputStream("TuyenXe.text");
+		out = new FileOutputStream("TuyenXe.text");
 		output = new PrintWriter(out, true);
 
 		for (Long key : mapTuyenXe.keySet()) {
-			System.out.println(mapTuyenXe.get(key).getRouteID() + "\t"
-					+ mapTuyenXe.get(key).getOperatorID() + "\t"
-					+ mapTuyenXe.get(key).getFromStopID() + "\t"
-					+ mapTuyenXe.get(key).getTostopID() + "\t"
-					+ mapTuyenXe.get(key).listBenefit() + "\t"
-					+ mapTuyenXe.get(key).listFromTime() + "\t"
-					+ mapTuyenXe.get(key).listStopTime());
-			
-			output.println(mapTuyenXe.get(key).getRouteID() + "\t"
-					+ mapTuyenXe.get(key).getOperatorID() + "\t"
-					+ mapTuyenXe.get(key).getFromStopID() + "\t"
-					+ mapTuyenXe.get(key).getTostopID() + "\t"
-					+ mapTuyenXe.get(key).listBenefit() + "\t"
-					+ mapTuyenXe.get(key).listFromTime() + "\t"
-					+ mapTuyenXe.get(key).listStopTime());
+			String str = "[";
+			for (int i = 0; i < mapTuyenXe.get(key).size(); i++) {
+				if (i == mapTuyenXe.get(key).size() - 1) {
+					str = str + mapTuyenXe.get(key).get(i).getOperatorID()
+							+ "\t" + mapTuyenXe.get(key).get(i).getFromStopID()
+							+ "\t" + mapTuyenXe.get(key).get(i).getTostopID()
+							+ "\t" + mapTuyenXe.get(key).get(i).listBenefit()
+							+ "\t" + mapTuyenXe.get(key).get(i).listFromTime()
+							+ "\t" + mapTuyenXe.get(key).get(i).listStopTime()
+							+ "\t[" + mapTuyenXe.get(key).get(i).getPhone()
+							+ "]";
+				} else {
+					str = str + mapTuyenXe.get(key).get(i).getOperatorID()
+							+ "\t" + mapTuyenXe.get(key).get(i).getFromStopID()
+							+ "\t" + mapTuyenXe.get(key).get(i).getTostopID()
+							+ "\t" + mapTuyenXe.get(key).get(i).listBenefit()
+							+ "\t" + mapTuyenXe.get(key).get(i).listFromTime()
+							+ "\t" + mapTuyenXe.get(key).get(i).listStopTime()
+							+ "\t[" + mapTuyenXe.get(key).get(i).getPhone()
+							+ "],[";
+				}
+
+			}
+			str = str + "]";
+
+			output.println(key + "\t" + str);
 		}
 		out.close();
-		output.close();*/
+		output.close();
+
+		// in ra lộ trình
+
+		out = new FileOutputStream("LoTrinh.text");
+		output = new PrintWriter(out, true);
+
+		for (Long key : mapLoTrinh.keySet()) {
+			String str = "[";
+			for (int i = 0; i < mapLoTrinh.get(key).size(); i++) {
+				if (i == mapLoTrinh.get(key).size() - 1) {
+					str = str + mapLoTrinh.get(key).get(i).getFromStopID()
+							+ "\t" + mapLoTrinh.get(key).get(i).getToStopID()
+							+ "\t" + mapLoTrinh.get(key).get(i).getStr() + "]";
+				} else {
+					str = str + mapLoTrinh.get(key).get(i).getFromStopID()
+							+ "\t" + mapLoTrinh.get(key).get(i).getToStopID()
+							+ "\t" + mapLoTrinh.get(key).get(i).getStr()
+							+ "],[";
+				}
+
+			}
+			str = str + "]";
+
+			output.println(key + "\t" + str);
+		}
+		out.close();
+		output.close();
 
 	}
 

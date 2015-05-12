@@ -25,22 +25,24 @@ import com.firestork.xekhach.TuyenXe;
 
 public class Cleaner {
 
-	private HashMap<Long, TuyenXe> mapTuyenXe;
+	private HashMap<Long, ArrayList<TuyenXe>> mapTuyenXe;
 	private HashMap<Long, NhaXe> mapNhaXe;
 	private HashMap<Long, BenXe> mapBenXe;
 	private HashMap<Long, ThanhPho> mapThanhPho;
-	private HashMap<Long, LoTrinh> mapLoTrinh;
+	private HashMap<Long, ArrayList<LoTrinh>> mapLoTrinh;
 	public FileOutputStream fileOut, fileError;
 	private PrintWriter output;
 	private PrintWriter outputError;
 	private String time;
 	private FileOutputStream out;
 
-	public HashMap<Long, TuyenXe> getMapTuyenXe() {
+	
+
+	public HashMap<Long, ArrayList<TuyenXe>> getMapTuyenXe() {
 		return mapTuyenXe;
 	}
 
-	public void setMapTuyenXe(HashMap<Long, TuyenXe> mapTuyenXe) {
+	public void setMapTuyenXe(HashMap<Long, ArrayList<TuyenXe>> mapTuyenXe) {
 		this.mapTuyenXe = mapTuyenXe;
 	}
 
@@ -68,11 +70,12 @@ public class Cleaner {
 		this.mapThanhPho = mapThanhPho;
 	}
 
-	public HashMap<Long, LoTrinh> getMapLoTrinh() {
+
+	public HashMap<Long, ArrayList<LoTrinh>> getMapLoTrinh() {
 		return mapLoTrinh;
 	}
 
-	public void setMapLoTrinh(HashMap<Long, LoTrinh> mapLoTrinh) {
+	public void setMapLoTrinh(HashMap<Long, ArrayList<LoTrinh>> mapLoTrinh) {
 		this.mapLoTrinh = mapLoTrinh;
 	}
 
@@ -133,24 +136,24 @@ public class Cleaner {
 
 		System.out.println(listThanhPho.size());
 
-		out = new FileOutputStream("TuyenXe.text");
-		output = new PrintWriter(out, true);
-		for (int i = 0; i < listThanhPho.size() - 1; i++) {
+		//out = new FileOutputStream("TuyenXe.text");
+		//output = new PrintWriter(out, true);
+		for (int i = 0; i < listThanhPho.size()-1; i++) {
 			for (int j = i + 1; j < listThanhPho.size(); j++) {
 				// for (int j = 26; j <= 26; j++) {
-				// int j = 23;
+				// int j = 14;
 				// System.out.println(i + "->" + j);
 				if (listThanhPho.get(i).getId() != listThanhPho.get(j).getId()) {
 					System.out.println(listThanhPho.get(i).getId() + "->"
-							+ listThanhPho.get(j).getId());
+							+ listThanhPho.get(j).getId()+": "+listThanhPho.get(i).getName()+"->"+listThanhPho.get(j).getName());
 					html1 = "http://vexere.com/vi-VN/ve-xe-khach-tu-"
 							+ listThanhPho.get(i).getLink() + "-di-"
 							+ listThanhPho.get(j).getLink()
-							+ "-ngay-09-05-2015-1"
+							+ "-ngay-13-05-2015-1"
 							+ listThanhPho.get(i).getId() + "t1"
 							+ listThanhPho.get(j).getId() + "1.html";
 
-					System.out.println(html1);
+					//System.out.println(html1);
 					// fileOut = new FileOutputStream("BenXe.text");
 					// fileError = new FileOutputStream("Error.text");
 					// output = new PrintWriter(fileOut, true);
@@ -160,8 +163,8 @@ public class Cleaner {
 				}
 			}
 		}
-		out.close();
-		output.close();
+		//out.close();
+		//output.close();
 		// fileOut.close();
 		// fileError.close();
 		// output.close();
@@ -173,7 +176,8 @@ public class Cleaner {
 			HashMap<String, String> map1) throws XPatherException, IOException {
 
 		ThanhPho thanhPho = new ThanhPho();
-
+		
+		
 		HtmlCleaner cleaner = new HtmlCleaner();
 		CleanerProperties props = cleaner.getProperties();
 		props.setAllowHtmlInsideAttributes(false);
@@ -209,7 +213,9 @@ public class Cleaner {
 
 		// xây dựng map tuyến xe, nhà xe, bến xe.
 		while (leng > 0) {
-			System.out.println("Tuyen: " + k);
+			//System.out.println("Tuyen: " + k);
+			ArrayList<TuyenXe> listTuyen = new ArrayList<>(); 
+			ArrayList<LoTrinh> listLoTrinh = new ArrayList<>();
 			tuyenXe = new TuyenXe();
 			ArrayList<Long> startTime = new ArrayList<>();
 			ArrayList<Long> stopTime = new ArrayList<>();
@@ -226,7 +232,11 @@ public class Cleaner {
 
 				// id thành phố đi
 				xpath = s + "/div[" + k + "]/@fromstate-id";
-				if (node.evaluateXPath(xpath).length != 0) {
+				if (node.evaluateXPath(xpath).length == 0) {
+					break;
+				}
+				else
+				{
 
 					obj = node.evaluateXPath(xpath);
 					thanhPho.setId(Long.parseLong(obj[0].toString()));
@@ -246,6 +256,8 @@ public class Cleaner {
 							+ map.get("xekhach.fromstop-id"));
 					tuyenXe.setFromStopID(Long.parseLong(obj[0].toString()));
 					benXeDi.setId(Long.parseLong(obj[0].toString()));
+					loTrinh.setFromStopID(Long.parseLong(obj[0].toString()));
+				
 
 					// tên bến đi
 
@@ -318,7 +330,9 @@ public class Cleaner {
 							+ map.get("xekhach.tostop-id"));
 					tuyenXe.setTostopID(Long.parseLong(obj[0].toString()));
 					benXeDen.setId(Long.parseLong(obj[0].toString()));
-
+					loTrinh.setToStopID(Long.parseLong(obj[0].toString()));
+					
+					
 					// tên bến đến
 
 					for (Object o : node.evaluateXPath(s + "/div[" + k + "]"
@@ -374,15 +388,11 @@ public class Cleaner {
 					nhaXe = new NhaXe();
 
 					// id nhà xe
-					try {
 
-						obj = node.evaluateXPath(s + "/div[" + k + "]"
-								+ map.get("xekhach.operator-id"));
-						nhaXe.setId(Long.parseLong(obj[0].toString()));
-						tuyenXe.setOperatorID(Long.parseLong(obj[0].toString()));
-					} catch (Exception e) {
-						System.out.println("Lỗi id nhà xe");
-					}
+					obj = node.evaluateXPath(s + "/div[" + k + "]"
+							+ map.get("xekhach.operator-id"));
+					nhaXe.setId(Long.parseLong(obj[0].toString()));
+					tuyenXe.setOperatorID(Long.parseLong(obj[0].toString()));
 
 					// tên nhà xe
 
@@ -399,24 +409,49 @@ public class Cleaner {
 						// System.out.println(nhaXe.getId() + "\t"
 						// +nhaXe.getTransportName());
 					}
-					// sdt nhà xe
+					
+					// id lộ trình
+					
+					obj = node.evaluateXPath(s + "/div[" + k + "]"
+							+ map.get("xekhach.schedule-id"));
+					loTrinh.setScheduleID(Long.parseLong(obj[0].toString()));
+					tuyenXe.setScheduleID(Long.parseLong(obj[0].toString()));
+					
+					//chi tiết lộ trình
+					
+					GetSchedule gets = new GetSchedule(loTrinh.getScheduleID(), benXeDi.getId(), benXeDen.getId());
+					loTrinh.setStr(gets.schedule());
+					
+					// add vào map lộ trình
+					
+					if (mapLoTrinh.get(loTrinh.getScheduleID()) == null) {
+						 listLoTrinh.add(loTrinh);
 
+					 }
+					 else {
+						 listLoTrinh = mapLoTrinh.get(loTrinh.getScheduleID());
+						 listLoTrinh.add(loTrinh);
+					 }
+					
+					mapLoTrinh.put(loTrinh.getScheduleID(), listLoTrinh);
 					// id tuyến xe
 
 					obj = node.evaluateXPath(s + "/div[" + k + "]"
 							+ map.get("xekhach.route-id"));
 					tuyenXe.setRouteID(Long.parseLong(obj[0].toString()));
 					loTrinh.setRouterID(Long.parseLong(obj[0].toString()));
+					
 
-					if (mapTuyenXe.get(tuyenXe.getRouteID()) != null) {
-						startTime = mapTuyenXe.get(tuyenXe.getRouteID())
-								.getStartTime();
-						stopTime = mapTuyenXe.get(tuyenXe.getRouteID())
-								.getStopTime();
-						System.out.println("Trung tuyến: "
-								+ listFromTime(startTime)
-								+ listFromTime(stopTime));
-					}
+					// get departure datetime
+					
+					obj = node.evaluateXPath(s + "/div[" + k + "]"
+							+ map.get("xekhach.route-time"));
+					
+					GetPhoneNumber get = new GetPhoneNumber(tuyenXe.getRouteID(), benXeDi.getId(), benXeDen.getId(), obj[0].toString());
+					//nhaXe.setPhoneNumber(get.PhoneNumber());
+					tuyenXe.setPhone(get.PhoneNumber());
+
+				
 
 					// tiện ích của tuyến xe
 					ArrayList<String> listBenifit = new ArrayList<>();
@@ -460,7 +495,7 @@ public class Cleaner {
 							time = StringEscapeUtils.unescapeHtml(((TagNode) o)
 									.getText().toString());
 						}
-						System.out.println(time);
+						//System.out.println(time);
 					}
 
 					tuyenXe.setStartTime(listTime(time, startTime));
@@ -486,69 +521,52 @@ public class Cleaner {
 										+ "//div[@class='destination-info-col fl-l']/div[@class='input-set fl-l']/span")) {
 							time = StringEscapeUtils.unescapeHtml(((TagNode) o)
 									.getText().toString());
-							System.out.println(time);
+							//System.out.println(time);
 						}
 
 					}
 					tuyenXe.setStopTime(listTime(time, stopTime));
 
-					// if (mapTuyenXe.get(tuyenXe.getRouteID()) == null) {
-					mapTuyenXe.put(tuyenXe.getRouteID(), tuyenXe);
+					
+					
+					 if (mapTuyenXe.get(tuyenXe.getRouteID()) == null) {
+						 listTuyen.add(tuyenXe);
 
-					output.println(tuyenXe.getRouteID()
-							+ "\t"
-							+ mapTuyenXe.get(tuyenXe.getRouteID())
-									.getOperatorID()
-							+ "\t"
-							+ mapTuyenXe.get(tuyenXe.getRouteID())
-									.getFromStopID()
-							+ "\t"
-							+ mapTuyenXe.get(tuyenXe.getRouteID())
-									.getTostopID()
-							+ "\t"
-							+ mapTuyenXe.get(tuyenXe.getRouteID())
-									.listBenefit()
-							+ "\t"
-							+ mapTuyenXe.get(tuyenXe.getRouteID())
-									.listFromTime()
-							+ "\t"
-							+ mapTuyenXe.get(tuyenXe.getRouteID())
-									.listStopTime());
-					System.out.println(tuyenXe.getRouteID()
-							+ "\t"
-							+ mapTuyenXe.get(tuyenXe.getRouteID())
-									.getOperatorID()
-							+ "\t"
-							+ mapTuyenXe.get(tuyenXe.getRouteID())
-									.getFromStopID()
-							+ "\t"
-							+ mapTuyenXe.get(tuyenXe.getRouteID())
-									.getTostopID()
-							+ "\t"
-							+ mapTuyenXe.get(tuyenXe.getRouteID())
-									.listBenefit()
-							+ "\t"
-							+ mapTuyenXe.get(tuyenXe.getRouteID())
-									.listFromTime()
-							+ "\t"
-							+ mapTuyenXe.get(tuyenXe.getRouteID())
-									.listStopTime());
+					 }
+					 else {
+						 listTuyen = mapTuyenXe.get(tuyenXe.getRouteID());
+						 listTuyen.add(tuyenXe);
+					 }
+					 mapTuyenXe.put(tuyenXe.getRouteID(), listTuyen);
+//					System.out.println(tuyenXe.getRouteID()
+//							+ "\t"
+//							+ tuyenXe.getOperatorID()
+//						
+//							+ "\t"
+//							+ tuyenXe.getFromStopID()
+//							+ "\t"
+//							+ tuyenXe.getTostopID()
+//							+ "\t"
+//							+tuyenXe.listBenefit()
+//							+ "\t"
+//							+ tuyenXe.listFromTime()
+//							+ "\t"
+//							+ tuyenXe.listStopTime()+"\t"+tuyenXe.getPhone());
 					// }
 
-					// tên điểm dừng
-
-					// sdt điểm dừng
-
-					// địa chỉ điểm dừng
-
-					// thời gian dừng
+					
+					
+					
+						
 				}
+				
 			} catch (XPatherException e) {
 				System.out.println("Không có kết quả " + e.getMessage());
 				// outputError.println(html);
 			}
 			k = k + 1;
 			leng = node.evaluateXPath(s + "/div[" + k + "]").length;
+			//System.out.println("div["+k+"], leng: "+node.evaluateXPath(s + "/div[" + k + "]").length);
 		}
 
 	}
@@ -588,7 +606,7 @@ public class Cleaner {
 			// System.out.println(thoigian + ": " + tgu + tg);
 		}
 
-		System.out.println(listFromTime(list));
+		//System.out.println(listFromTime(list));
 		return list;
 
 	}
@@ -599,7 +617,7 @@ public class Cleaner {
 			if (i == startTime.size() - 1) {
 				str = str + startTime.get(i);
 			} else {
-				str = str + startTime.get(i) + " ";
+				str = str + startTime.get(i) + ",";
 			}
 		}
 		str = str + "]";

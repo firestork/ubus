@@ -4,33 +4,43 @@ import java.util.ArrayList;
 
 public class LoTrinh {
 
-	private Long routerID;
-	private String name;
-	private ArrayList<String> listPhone;
-	private String adress;
-	public Long getRouterID() {
+	private long scheduleID;
+	private long routerID;
+	private long fromStopID;
+	private long toStopID;
+	private String str;
+	
+	
+	
+	public long getFromStopID() {
+		return fromStopID;
+	}
+	public void setFromStopID(long fromStopID) {
+		this.fromStopID = fromStopID;
+	}
+	public long getToStopID() {
+		return toStopID;
+	}
+	public void setToStopID(long toStopID) {
+		this.toStopID = toStopID;
+	}
+	public long getScheduleID() {
+		return scheduleID;
+	}
+	public void setScheduleID(long scheduleID) {
+		this.scheduleID = scheduleID;
+	}
+	public long getRouterID() {
 		return routerID;
 	}
-	public void setRouterID(Long routerID) {
+	public void setRouterID(long routerID) {
 		this.routerID = routerID;
 	}
-	public String getName() {
-		return name;
+	public String getStr() {
+		return str;
 	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public ArrayList<String> getListPhone() {
-		return listPhone;
-	}
-	public void setListPhone(ArrayList<String> listPhone) {
-		this.listPhone = listPhone;
-	}
-	public String getAdress() {
-		return adress;
-	}
-	public void setAdress(String adress) {
-		this.adress = adress;
+	public void setStr(String str) {
+		this.str = str;
 	}
 	
 	

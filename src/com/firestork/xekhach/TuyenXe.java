@@ -8,6 +8,7 @@ public class TuyenXe {
 	private long operatorID;
 	private long fromStopID;
 	private long tostopID;
+	private long scheduleID;
 
 	private String routeName;
 	private static ArrayList<Long> startTime;
@@ -16,6 +17,19 @@ public class TuyenXe {
 	private String price;
 	private String seatInfo;
 	private ArrayList<String> benifit;
+	private String phone;
+	
+	
+
+	
+	
+	public long getScheduleID() {
+		return scheduleID;
+	}
+
+	public void setScheduleID(long scheduleID) {
+		this.scheduleID = scheduleID;
+	}
 
 	public static String listFromTime() {
 		String str = "[";
@@ -23,7 +37,7 @@ public class TuyenXe {
 			if (i == startTime.size() - 1) {
 				str = str + startTime.get(i);
 			} else {
-				str = str + startTime.get(i) + " ";
+				str = str + startTime.get(i) + ",";
 			}
 		}
 		str = str + "]";
@@ -36,7 +50,7 @@ public class TuyenXe {
 			if (i == stopTime.size() - 1) {
 				str = str + stopTime.get(i);
 			} else {
-				str = str + stopTime.get(i) + " ";
+				str = str + stopTime.get(i) + ",";
 			}
 		}
 		str = str + "]";
@@ -54,6 +68,17 @@ public class TuyenXe {
 		}
 		str = str + "]";
 		return str;
+	}
+
+	
+	
+	
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	public ArrayList<Long> getStopTime() {

@@ -14,6 +14,8 @@
         <fromstate-id>/@fromstate-id</fromstate-id>
         <tostate-id>/@tostate-id</tostate-id>
         <depart-station>//div[@class='depart-station hidden-xs']/p/@data-value</depart-station>
+        <route-time>/@route-time</route-time>
+        <schedule-id>/@schedule-id</schedule-id>
         
       <!--   <ten-nha-xe>//div[@class='transporter-col wd-160 fl-l']/p[@class='transporter-name']</ten-nha-xe>
         <diem-di>//div[@class='depart-station rel-pos fl-l']/p</diem-di>
