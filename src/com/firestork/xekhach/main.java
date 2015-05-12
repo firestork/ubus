@@ -108,7 +108,7 @@ public class main {
 
 		out = new FileOutputStream("TuyenXe.text");
 		output = new PrintWriter(out, true);
-
+		int count =0;
 		for (Long key : mapTuyenXe.keySet()) {
 			String str = "[";
 			for (int i = 0; i < mapTuyenXe.get(key).size(); i++) {
@@ -116,6 +116,7 @@ public class main {
 					str = str + mapTuyenXe.get(key).get(i).getOperatorID()
 							+ "\t" + mapTuyenXe.get(key).get(i).getFromStopID()
 							+ "\t" + mapTuyenXe.get(key).get(i).getTostopID()
+							+"\t"+ mapTuyenXe.get(key).get(i).getScheduleID()
 							+ "\t" + mapTuyenXe.get(key).get(i).listBenefit()
 							+ "\t" + mapTuyenXe.get(key).get(i).listFromTime()
 							+ "\t" + mapTuyenXe.get(key).get(i).listStopTime()
@@ -125,6 +126,7 @@ public class main {
 					str = str + mapTuyenXe.get(key).get(i).getOperatorID()
 							+ "\t" + mapTuyenXe.get(key).get(i).getFromStopID()
 							+ "\t" + mapTuyenXe.get(key).get(i).getTostopID()
+							+"\t"+ mapTuyenXe.get(key).get(i).getScheduleID()
 							+ "\t" + mapTuyenXe.get(key).get(i).listBenefit()
 							+ "\t" + mapTuyenXe.get(key).get(i).listFromTime()
 							+ "\t" + mapTuyenXe.get(key).get(i).listStopTime()
@@ -166,6 +168,7 @@ public class main {
 		}
 		out.close();
 		output.close();
+		System.out.println(mapTuyenXe.size());
 
 	}
 
