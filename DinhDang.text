@@ -5,12 +5,12 @@ Tuyến Xe: "id tuyến +\t+ [list tuyến xe]"
 Lộ trình "id Lotrinh+\t+[list Lộ trình]"
 
 
-list tuyến xe: id nhà xe +"\t"+ id bến đi +"\t"+ id bến đến +\t+ [list tiện ích] +\t+ [list thời gian đi] +\t+ [list thời gian đến] +\t+ [list sdt]
+list tuyến xe: id nhà xe +"\t"+ id bến đi +"\t"+ id bến đến +\t+ id lộ trình +\t+ [list tiện ích] +\t+ [list thời gian đi] +\t+ [list thời gian đến] +\t+ [list sdt]
 
 list sdt: sdt"\t"sdt2,v,v...
 list tiện ích: tiện ích 1, tiện ich 2,v.v...
-list thời gian: thời gian 1+\t+thời gian 2 +\t+v.v....
-list lộ trình: id bến đi+\t+ id bến đến+\t+[list lộ trình ứng với tuyến đó]
+list thời gian: thời gian 1,thời gian 2,v.v....
+list lộ trình: id bến đi+\t+ id bến đến+\t+[list điểm dừng]
 
-list lộ trình ứng với tuyến: Tên điểm dừng +\t+ sdt điểm dừng +\t+ địa chỉ điểm dừng +\t+ [thời gian 1, thời gian 2, v.v.v...]
+list điểm dừng: Tên điểm dừng +\t+ sdt điểm dừng +\t+ địa chỉ điểm dừng +\t+ [thời gian 1, thời gian 2, v.v.v...]
 

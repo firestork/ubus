@@ -550,6 +550,7 @@
 938	45	Chí Thạnh	Địa chỉ: Thị trấn Chí Thạnh - Tuy An - Phú Yên
 939	8	Tây Sơn	Địa chỉ: 214 - Quang Trung - TT Phú Phong - Tây Sơn - Bình Định
 940	21	Đức Cơ	Địa chỉ: Đức Cơ - Gia Lai
+943	17	Quảng Sơn	Địa chỉ: Đăk Glong - Đăk Nông
 944	17	Gia Nghĩa	Địa chỉ: Gia Nghĩa - Đăk Nông
 945	16	Buôn Mê Thuột	Địa chỉ: Buôn Ma Thuột - Đắk Lắk
 946	21	Pleiku	Địa chỉ: Pleiku - Gia Lai
@@ -584,6 +585,7 @@
 3014	48	Trà Bồng	Địa chỉ: Trà Bồng - Quảng Ngãi
 3016	17	Quảng Khê	Địa chỉ: Đăk Glong - Đăk Nông
 969	40	Bến Xe Nam Định	Địa chỉ: Xã Lộc Hòa - Nam Định - Nam Định
+3017	17	Cư Jút	Địa chỉ: Cư Jút - Đăk Nông
 3018	50	Hồ Xá	Địa chỉ: Cây xăng số 32 quốc lộ 1A, thị trấn Hồ Xá - Vĩnh Linh - Quảng Trị
 3019	29	Tp.Hồ Chí Minh	Địa chỉ: 203A Lê Hồng Phong - Quận 5 - Hồ Chí Minh
 972	63	Bến Xe Khách Lục Yên	Địa chỉ: Thị Trấn Yên Thế - Lục Yên - Yên Bái
@@ -776,6 +778,7 @@
 5200	2	Vũng Tàu	Địa chỉ: Vũng Tàu - Bà Rịa-Vũng Tàu
 1104	49	Bến Xe Mông Dương	Địa chỉ: 18 Mông Dương - Cẩm Phả - Quảng Ninh
 5201	29	Sân Bay Quốc Tế Tân Sơn Nhất	Địa chỉ: Tân Bình - Hồ Chí Minh
+5202	17	Tuy Đức	Địa chỉ: Tuy Đức - Đăk Nông
 1110	49	Bến Xe Uông Bí	Địa chỉ: Khu phố 3, phường Yên Thanh - Uông Bí - Quảng Ninh
 1112	22	Bến Xe Khách Huyện Bắc Quang	Địa chỉ: Quốc lộ 2, Thị trấn Việt Quang - Bắc Quang - Hà Giang
 1116	46	Bến Xe Hoàn Lão	Địa chỉ: Tiểu khu 1, Thị Trấn Hoàn Lão - Bố Trạch - Quảng Bình
@@ -847,7 +850,6 @@
 1205	36	Tp Đà Lạt	Địa chỉ: 01 Nguyễn Thị Nghĩa - Đà Lạt - Lâm Đồng
 1206	40	Trực Ninh - Nam Định	Địa chỉ: Xã Trực Phú - Trực Ninh - Nam Định
 1207	32	Bưu Điện Cam Ranh	Địa chỉ: 01 Nguyễn Trọng Kỷ, P.Cam Lợi - Cam Ranh - Khánh Hòa
-1208	56	Lê Hồng Phong - Thanh Hóa	Địa chỉ: 143 Lê Hồng Phong - Thanh Hóa - Thanh Hóa
 1209	56	Thị tứ gốm	Địa chỉ: Thị tứ gốm, xã Đồng Tiến - Triệu Sơn - Thanh Hóa
 1210	56	Ngã ba Định Bình	Địa chỉ: Ngã ba Định Bình - Yên Định - Thanh Hóa
 1211	4	Phủ Thông	Địa chỉ: Phủ Thông - Bạch Thông - Bắc Kạn

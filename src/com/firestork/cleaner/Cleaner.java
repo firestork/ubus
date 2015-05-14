@@ -139,7 +139,7 @@ public class Cleaner {
 		//out = new FileOutputStream("TuyenXe.text");
 		//output = new PrintWriter(out, true);
 		for (int i = 0; i < listThanhPho.size()-1; i++) {
-			for (int j = i + 1; j < listThanhPho.size(); j++) {
+			for (int j = i+1; j < listThanhPho.size(); j++) {
 				// for (int j = 26; j <= 26; j++) {
 				// int j = 14;
 				// System.out.println(i + "->" + j);
@@ -149,7 +149,7 @@ public class Cleaner {
 					html1 = "http://vexere.com/vi-VN/ve-xe-khach-tu-"
 							+ listThanhPho.get(i).getLink() + "-di-"
 							+ listThanhPho.get(j).getLink()
-							+ "-ngay-13-05-2015-1"
+							+ "-ngay-15-05-2015-1"
 							+ listThanhPho.get(i).getId() + "t1"
 							+ listThanhPho.get(j).getId() + "1.html";
 
@@ -498,7 +498,8 @@ public class Cleaner {
 						//System.out.println(time);
 					}
 
-					tuyenXe.setStartTime(listTime(time, startTime));
+					tuyenXe.setStartTime(listTime(time));
+					tuyenXe.setListStartTime(listFromTime(listTime(time)));
 
 					// thời gian đến tuyến xe
 					if (node.evaluateXPath(s + "/div[" + k + "]"
@@ -525,7 +526,8 @@ public class Cleaner {
 						}
 
 					}
-					tuyenXe.setStopTime(listTime(time, stopTime));
+					tuyenXe.setStopTime(listTime(time));
+					tuyenXe.setListStopTime(listFromTime(listTime(time)));
 
 					
 					
@@ -571,9 +573,10 @@ public class Cleaner {
 
 	}
 
-	public static ArrayList<Long> listTime(String time, ArrayList<Long> list) {
+	//list time cho chuoix thời gian ra mảng
+	public static ArrayList<Long> listTime(String time) {
 		time = time.trim();
-		// ArrayList<Long> list = new ArrayList<>();
+		ArrayList<Long> list = new ArrayList<>();
 		int dem = 0;
 		long tgu = 0;
 		long tg = 0;

@@ -108,7 +108,7 @@ public class main {
 
 		out = new FileOutputStream("TuyenXe.text");
 		output = new PrintWriter(out, true);
-		int count =0;
+		int count = 0;
 		for (Long key : mapTuyenXe.keySet()) {
 			String str = "[";
 			for (int i = 0; i < mapTuyenXe.get(key).size(); i++) {
@@ -116,20 +116,24 @@ public class main {
 					str = str + mapTuyenXe.get(key).get(i).getOperatorID()
 							+ "\t" + mapTuyenXe.get(key).get(i).getFromStopID()
 							+ "\t" + mapTuyenXe.get(key).get(i).getTostopID()
-							+"\t"+ mapTuyenXe.get(key).get(i).getScheduleID()
+							+ "\t" + mapTuyenXe.get(key).get(i).getScheduleID()
 							+ "\t" + mapTuyenXe.get(key).get(i).listBenefit()
-							+ "\t" + mapTuyenXe.get(key).get(i).listFromTime()
-							+ "\t" + mapTuyenXe.get(key).get(i).listStopTime()
+							+ "\t"
+							+ mapTuyenXe.get(key).get(i).getListStartTime()
+							+ "\t"
+							+ mapTuyenXe.get(key).get(i).getListStopTime()
 							+ "\t[" + mapTuyenXe.get(key).get(i).getPhone()
 							+ "]";
 				} else {
 					str = str + mapTuyenXe.get(key).get(i).getOperatorID()
 							+ "\t" + mapTuyenXe.get(key).get(i).getFromStopID()
 							+ "\t" + mapTuyenXe.get(key).get(i).getTostopID()
-							+"\t"+ mapTuyenXe.get(key).get(i).getScheduleID()
+							+ "\t" + mapTuyenXe.get(key).get(i).getScheduleID()
 							+ "\t" + mapTuyenXe.get(key).get(i).listBenefit()
-							+ "\t" + mapTuyenXe.get(key).get(i).listFromTime()
-							+ "\t" + mapTuyenXe.get(key).get(i).listStopTime()
+							+ "\t"
+							+ mapTuyenXe.get(key).get(i).getListStartTime()
+							+ "\t"
+							+ mapTuyenXe.get(key).get(i).getListStopTime()
 							+ "\t[" + mapTuyenXe.get(key).get(i).getPhone()
 							+ "],[";
 				}
@@ -138,6 +142,7 @@ public class main {
 			str = str + "]";
 
 			output.println(key + "\t" + str);
+			//System.out.println(key +"\t"+str);
 		}
 		out.close();
 		output.close();
@@ -170,6 +175,19 @@ public class main {
 		output.close();
 		System.out.println(mapTuyenXe.size());
 
+	}
+
+	public static String listFromTime(ArrayList<Long> startTime) {
+		String str = "[";
+		for (int i = 0; i < startTime.size(); i++) {
+			if (i == startTime.size() - 1) {
+				str = str + startTime.get(i);
+			} else {
+				str = str + startTime.get(i) + ",";
+			}
+		}
+		str = str + "]";
+		return str;
 	}
 
 }

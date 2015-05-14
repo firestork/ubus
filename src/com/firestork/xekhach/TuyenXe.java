@@ -13,6 +13,11 @@ public class TuyenXe {
 	private String routeName;
 	private static ArrayList<Long> startTime;
 	private static  ArrayList<Long> stopTime;
+	
+	// thời gian kiểu string 
+	
+	private String listStartTime;
+	private String listStopTime;
 	private String totalTime;
 	private String price;
 	private String seatInfo;
@@ -23,6 +28,22 @@ public class TuyenXe {
 
 	
 	
+	public String getListStartTime() {
+		return listStartTime;
+	}
+
+	public void setListStartTime(String listStartTime) {
+		this.listStartTime = listStartTime;
+	}
+
+	public String getListStopTime() {
+		return listStopTime;
+	}
+
+	public void setListStopTime(String listStopTime) {
+		this.listStopTime = listStopTime;
+	}
+
 	public long getScheduleID() {
 		return scheduleID;
 	}
